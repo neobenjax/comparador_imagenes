@@ -9,12 +9,27 @@
 			width: 100%;
 			max-width: 900px;
 		}
-		div.camara,div.areaComparar{
-			width: 320px;
-			margin: 0 auto;
+		div.camara, div.areaComparar {
+		    width: 320px;
+		    margin: 0 auto;
+		    position: relative;
+		    height: 240px;
 		}
 		div.controlesCamara{
 			text-align: center;
+		}
+		img.overlayCam {
+		    width: 100%;
+		    height: 100%;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    opacity: 0.3;
+		}
+
+		div#espacioCamara {
+		    width: 100%;
+		    height: 100%;
 		}
 	</style>
 </head>
@@ -23,7 +38,8 @@
 
 	<div class="contenidoFull">
 		<div class="contenidoCentrado">
-			<div class="camara">
+			<div class="camara" id="camara">
+				<img src="img/overlay.jpg" alt="overlay" class="overlayCam">
 				<div id="espacioCamara"></div>
 			</div>
 			<div class="controlesCamara">
@@ -49,8 +65,8 @@
 	<script type="text/javascript" src="js/webcam.min.js"></script>
 	<script language="JavaScript">
 		Webcam.set({
-			width: 320,
-			height: 240,
+			width: $('#camara').width(),
+			height: $('#camara').height(),
 			image_format: 'jpeg',
 			jpeg_quality: 90
 		});
