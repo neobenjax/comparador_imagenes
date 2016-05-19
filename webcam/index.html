@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Webcam Test</title>
+	<style type="text/css">
+		div.contenidoCentrado{
+			margin:0 auto;
+			width: 100%;
+			max-width: 900px;
+		}
+		div.camara,div.areaComparar{
+			width: 320px;
+			margin: 0 auto;
+		}
+		div.controlesCamara{
+			text-align: center;
+		}
+	</style>
+</head>
+<body>
+	<!--FUENTE: https://github.com/jhuckaby/webcamjs -->
+
+	<div class="contenidoFull">
+		<div class="contenidoCentrado">
+			<div class="camara">
+				<div id="espacioCamara"></div>
+			</div>
+			<div class="controlesCamara">
+				<ul class="listaControles">
+					<li class="contCapturar">
+						<a href="#" class="btnAccion" id="capturar">Capturar</a>
+					</li>
+					<li class="contCancel" style="display:none;">
+						<a href="#" class="btnAccion" id="cancelar">Volver a tomar</a>
+					</li>
+					<li class="contGuardar" style="display:none;">
+						<a href="#" class="btnAccion" id="guardar">Guardar</a>
+					</li>
+				</ul>
+			</div>
+			<div class="areaComparar">
+				<div id="real"></div>
+				<div id="comparacion"></div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/webcam.min.js"></script>
+	<script language="JavaScript">
+		Webcam.set({
+			width: 320,
+			height: 240,
+			image_format: 'jpeg',
+			jpeg_quality: 90
+		});
+		Webcam.attach( '#espacioCamara' );
+
+		$(document).on('click','#capturar',function(event){
+			event.preventDefault();
+			Webcam.freeze();
+			$('.contCapturar').hide();
+			$('.contCancel,.contGuardar').show();
+		});
+		$(document).on('click','#cancelar',function(event){
+			event.preventDefault();
+			Webcam.unfreeze();
+			$('.contCapturar').show();
+			$('.contCancel,.contGuardar').hide();
+		});
+		$(document).on('click','#guardar',function(event){
+			event.preventDefault();
+			Webcam.snap( function(data_uri) {
+				$('#real').html('<img src="'+data_uri+'"/>');
+				$('.contCapturar').show();
+				$('.contCancel,.contGuardar').hide();
+			} );
+			
+		});
+	</script>
+</body>
+</html>
