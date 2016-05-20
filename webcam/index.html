@@ -74,31 +74,6 @@
 	<script type="text/javascript" src="js/adapter.js"></script>
 	<script language="JavaScript">
 
-
-		$(document).on('click','#capturar',function(event){
-			event.preventDefault();
-			canvas.getContext('2d').
-		    drawImage(video, 0, 0, canvas.width, canvas.height);
-			$('.contCapturar').hide();
-			$('.contCancel,.contGuardar').show();
-			stop();
-		});
-		$(document).on('click','#cancelar',function(event){
-			event.preventDefault();
-			start()
-			$('.contCapturar').show();
-			$('.contCancel,.contGuardar').hide();
-		});
-		$(document).on('click','#guardar',function(event){
-			event.preventDefault();
-			Webcam.snap( function(data_uri) {
-				$('#real').html('<img src="'+data_uri+'"/>');
-				$('.contCapturar').show();
-				$('.contCancel,.contGuardar').hide();
-			} );
-			
-		});
-
 		var videoElement = document.querySelector('video');
 		var videoSelect = document.querySelector('.videoSource');
 		var canvas = window.canvas = document.querySelector('canvas');
@@ -106,6 +81,7 @@
 		var selectors = [videoSelect];
 		var videoSource = "";
 		var localStream;
+
 
 		function gotDevices(deviceInfos) {
 		  // Handles being called several times to update labels. Preserve values.
@@ -135,31 +111,29 @@
 		}
 
 		function start() {
-		  if (window.stream) {
-		    	window.stream.getTracks().forEach(function(track) {
-		      	track.stop();
-		    });
-		  }
+
+			if (window.stream) {
+				window.stream.getTracks().forEach(function(track) {
+			  		track.stop();
+				});
+			}
 
 
-		  var constraints = {
-		    video: {deviceId: videoSource ? {exact: videoSource} : undefined}
-		  };
+			var constraints = {
+				video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+			};
 
-		  navigator.mediaDevices.getUserMedia(constraints)
-		  .then(function(stream) {
+			navigator.mediaDevices.getUserMedia(constraints)
+			.then(function(stream) {
 
-		    window.stream = stream; // make stream available to console
-		    videoElement.srcObject = stream;
-		    // Refresh button list in case labels have become available
-		    return navigator.mediaDevices.enumerateDevices();
-		  })
-		  .then(gotDevices)
-		  .catch(errorCallback);
+				window.stream = stream; // make stream available to console
+				videoElement.srcObject = stream;
+				// Refresh button list in case labels have become available
+				return navigator.mediaDevices.enumerateDevices();
+			})
+			.then(gotDevices)
+			.catch(errorCallback);
 		}
-
-		start();
-		hilo();
 
 		function hilo(){
 
@@ -183,6 +157,44 @@
 
 
 		}
+
+		$(document).on('click','#capturar',function(event){
+			event.preventDefault();
+			canvas.getContext('2d').
+		    drawImage(video, 0, 0, canvas.width, canvas.height);
+			$('.contCapturar').hide();
+			$('.contCancel,.contGuardar').show();
+			stop();
+		});
+		
+		$(document).on('click','#cancelar',function(event){
+			event.preventDefault();
+			start()
+			$('.contCapturar').show();
+			$('.contCancel,.contGuardar').hide();
+		});
+
+		$(document).on('click','#guardar',function(event){
+			event.preventDefault();
+			Webcam.snap( function(data_uri) {
+				$('#real').html('<img src="'+data_uri+'"/>');
+				$('.contCapturar').show();
+				$('.contCancel,.contGuardar').hide();
+			} );
+			
+		});
+
+
+		hasCamera = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? 
+			navigator.mediaDevices : ((navigator.mozGetUserMedia || navigator.webkitGetUserMedia) ? true : false);
+
+		if (hasCamera){
+			start();
+			hilo();
+		}
+		else
+			alert('No sirves!');
+
 
 	</script>
 </body>
