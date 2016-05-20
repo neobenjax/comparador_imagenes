@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Upload and Crop</title>
+	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
+	<script type="text/javascript" src="js/jquery.cropit.js"></script>
+	<style type="text/css">
+		.cropit-preview {
+			background-color: #f8f8f8;
+			background-size: cover;
+			border: 5px solid #ccc;
+			border-radius: 3px;
+			margin-top: 7px;
+			width: 320px;
+			height: 240px;
+		}
+
+		.cropit-preview-image-container {
+			cursor: move;
+		}
+
+		.cropit-preview-background {
+			opacity: .2;
+			cursor: auto;
+		}
+
+		.image-size-label {
+			margin-top: 10px;
+		}
+		div.btnUpload{
+			position: relative;
+		}
+		div.btnUpload .cropit-image-input{
+			visibility: hidden;
+		    position: absolute;
+		    top: 0;
+		    left: 0;
+		    width: 1px;
+		    height: 1px;
+		}
+
+
+		input, .export {
+			/* Use relative position to prevent from being covered by image background */
+			position: relative;
+			z-index: 10;
+			display: block;
+		}
+
+		button {
+			margin-top: 10px;
+		}
+	</style>
+</head>
+<body>
+	<div class="contenidoFull onlyIphone">
+		<div class="contenidoCentrado">
+			
+			<div class="image-editor">
+				<div class="btnUpload">
+					<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" class="cropit-image-input">
+				</div>
+		      	<div class="cropit-preview"></div>
+		      	<div class="image-size-label">
+		        	Redimensionar imagen
+		      	</div>
+		      	<input type="range" class="cropit-image-zoom-input">
+		      	<button class="export">Validar</button>
+
+		    </div>
+
+		    <div id="croppedImage" class="croppedHere">
+		    	
+		    </div>
+
+		</div>
+	</div>
+
+	<script type="text/javascript">
+	$(document).ready(function(){
+		$('.image-editor').cropit({
+		  imageBackground: true,
+		  imageBackgroundBorderWidth: 20
+		});
+		$('.export').click(function() {
+			var imageData = $('.image-editor').cropit('export', {
+				type: 'image/jpeg',
+				quality: .6
+			});
+          	$('#croppedImage').html('<img src="'+imageData+'" class="imagenCroppeada">');
+        });
+	});
+
+	</script>
+</body>
+</html>
