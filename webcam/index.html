@@ -40,8 +40,11 @@
 		<div class="contenidoCentrado">
 			<div class="camara" id="camara">
 				<img src="img/overlay.jpg" alt="overlay" class="overlayCam">
-				<div id="espacioCamara"></div>
+				<div id="espacioCamara">
+					<video id="video" width="320" height="240" autoplay></video>
+				</div>
 			</div>
+			
 			<div class="controlesCamara">
 				<ul class="listaControles">
 					<li class="contCapturar">
@@ -55,32 +58,34 @@
 					</li>
 				</ul>
 			</div>
+			<div class="videoSource">
+
+		    </div>
 			<div class="areaComparar">
 				<div id="real"></div>
 				<div id="comparacion"></div>
 			</div>
+
+			<canvas width="320" height="240"></canvas>
+
 		</div>
 	</div>
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
-	<script type="text/javascript" src="js/webcam.min.js"></script>
+	<script type="text/javascript" src="js/adapter.js"></script>
 	<script language="JavaScript">
-		Webcam.set({
-			width: $('#camara').width(),
-			height: $('#camara').height(),
-			image_format: 'jpeg',
-			jpeg_quality: 90
-		});
-		Webcam.attach( '#espacioCamara' );
+
 
 		$(document).on('click','#capturar',function(event){
 			event.preventDefault();
-			Webcam.freeze();
+			canvas.getContext('2d').
+		    drawImage(video, 0, 0, canvas.width, canvas.height);
 			$('.contCapturar').hide();
 			$('.contCancel,.contGuardar').show();
+			stop();
 		});
 		$(document).on('click','#cancelar',function(event){
 			event.preventDefault();
-			Webcam.unfreeze();
+			start()
 			$('.contCapturar').show();
 			$('.contCancel,.contGuardar').hide();
 		});
@@ -93,6 +98,92 @@
 			} );
 			
 		});
+
+		var videoElement = document.querySelector('video');
+		var videoSelect = document.querySelector('.videoSource');
+		var canvas = window.canvas = document.querySelector('canvas');
+		var button = document.querySelector('button');
+		var selectors = [videoSelect];
+		var videoSource = "";
+		var localStream;
+
+		function gotDevices(deviceInfos) {
+		  // Handles being called several times to update labels. Preserve values.
+
+		  selectors.forEach(function(input) {
+		    while (input.firstChild) {
+		      input.removeChild(input.firstChild);
+		    }
+		  });
+
+		  for (var i = 0; i !== deviceInfos.length; ++i) {
+		    var deviceInfo = deviceInfos[i];
+		    /*var option = document.createElement('option');
+		    option.value = deviceInfo.deviceId;
+			*/
+		    if (deviceInfo.kind === 'videoinput') {
+		      //option.text = deviceInfo.label || 'camera ' + (videoSelect.length + 1);
+		      $('.videoSource').append('<input value="'+deviceInfo.deviceId+'" class="btnCamera" name="cameraType[]">'+deviceInfo.label);
+		    } 
+
+		  }
+
+		}
+
+		function errorCallback(error) {
+		  console.log('navigator.getUserMedia error: ', error);
+		}
+
+		function start() {
+		  if (window.stream) {
+		    	window.stream.getTracks().forEach(function(track) {
+		      	track.stop();
+		    });
+		  }
+
+
+		  var constraints = {
+		    video: {deviceId: videoSource ? {exact: videoSource} : undefined}
+		  };
+
+		  navigator.mediaDevices.getUserMedia(constraints)
+		  .then(function(stream) {
+
+		    window.stream = stream; // make stream available to console
+		    videoElement.srcObject = stream;
+		    // Refresh button list in case labels have become available
+		    return navigator.mediaDevices.enumerateDevices();
+		  })
+		  .then(gotDevices)
+		  .catch(errorCallback);
+		}
+
+		start();
+		hilo();
+
+		function hilo(){
+
+			if($('.btnCamera').last().length > 0)
+			{
+				videoSource = $('.btnCamera').last().val();
+				start();
+			}
+			else
+				setTimeout(hilo,20);
+
+		}
+
+		function stop(){
+
+			if (window.stream) {
+		    	window.stream.getTracks().forEach(function(track) {
+		      	track.stop();
+		    });
+		  }
+
+
+		}
+
 	</script>
 </body>
 </html>
