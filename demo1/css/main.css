@@ -237,3 +237,8 @@ input[type=range]:focus::-ms-fill-upper {
   background: #367ebd;
 }
 /*INPUT RANGE*/
+@media only screen and (max-width : 667px) {
+	#ejemploFoto{
+		max-width: calc(100vw - 60px);
+	}
+}
