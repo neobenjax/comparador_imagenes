@@ -2,112 +2,16 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
 	<title>Webcam Test</title>
-	<style type="text/css">
-		div.contenidoCentrado{
-			margin:0 auto;
-			width: 100%;
-			max-width: 900px;
-		}
-		div.camara {
-		    width: 320px;
-		    margin: 0 auto;
-		    position: relative;
-		    height: 240px;
-		}
-		div.areaComparar{
-			margin: 0 auto;
-		    position: relative;
-		   /* display: none;*/
-		}
-		div.controlesCamara{
-			text-align: center;
-		}
-		img.overlayCam {
-		    width: 100%;
-		    height: 100%;
-		    position: absolute;
-		    top: 0;
-		    left: 0;
-		    opacity: 0.3;
-		}
-
-		div#espacioCamara {
-		    width: 100%;
-		    height: 100%;
-		}
-
-		/* ESTILOS UPLOADFOTO */
-
-		.cropit-preview {
-			background-color: #f8f8f8;
-			background-size: cover;
-			border: 5px solid #ccc;
-			border-radius: 3px;
-			margin-top: 7px;
-			width: 320px;
-			height: 240px;
-		}
-
-		.cropit-preview-image-container {
-			cursor: move;
-		}
-
-		.cropit-preview-background {
-			opacity: .2;
-			cursor: auto;
-		}
-
-		.image-size-label {
-			margin-top: 10px;
-		}
-		div.btnUpload{
-			position: relative;
-		}
-		/*
-		div.btnUpload .cropit-image-input{
-			visibility: hidden;
-		    position: absolute;
-		    top: 0;
-		    left: 0;
-		    width: 1px;
-		    height: 1px;
-		}
-
-		div.btnUpload .btnEstilizado {
-		    background: #52a0c7;
-		    color: #fff;
-		    padding: 5px 10px;
-		    text-align: center;
-		    -webkit-user-select: none;
-		    -moz-user-select: none;
-		    -ms-user-select: none;
-		    user-select: none;
-		    cursor: pointer;
-		    display: inline-block;
-		    position: relative;
-		    -webkit-box-shadow: 0 2px #3784aa;
-		    box-shadow: 0 2px #3784aa;
-		}*/
-
-
-		input, .export {
-			/* Use relative position to prevent from being covered by image background */
-			position: relative;
-			z-index: 10;
-			display: block;
-		}
-
-		button {
-			margin-top: 10px;
-		}
-
-	</style>
+	<link rel="stylesheet" href="css/main.css" type="text/css"/>
 
 	<script type="text/javascript" src="js/jquery-1.10.2.js"></script>
 	<script type="text/javascript" src="js/adapter.js"></script>
 	<script type="text/javascript" src="js/jquery.cropit.js"></script>
 	<script src="js/resemble.js"></script>
+	<link rel="stylesheet" href="fancybox/jquery.fancybox.css?v=2.1.5" type="text/css" media="screen" />
+	<script type="text/javascript" src="fancybox/jquery.fancybox.pack.js?v=2.1.5"></script>
 </head>
 <body>
 	<!--FUENTE: https://github.com/jhuckaby/webcamjs -->
@@ -124,19 +28,9 @@
 				</div>
 				
 				<div class="controlesCamara">
-					<ul class="listaControles">
-						<li class="contCapturar">
-							<a href="#" class="btnAccion" id="capturar">Capturar</a>
-						</li>
-						<li class="contCancel" style="display:none;">
-							<a href="#" class="btnAccion" id="cancelar">Volver a tomar</a>
-						</li>
-						<li class="contGuardar">
-							<a href="#" class="btnAccion" id="guardar">Guardar</a>
-						</li>
-					</ul>
+					<a href="#" class="btnAccion" id="capturar"></a>
+					<a href="#" class="btnAccion" id="cancelar" style="display:none;">Volver a tomar</a>
 				</div>
-				
 				<div class="videoSource" style="display: none"></div>
 			</div>
 
@@ -147,18 +41,18 @@
 
 						<input type="file" capture="camera" accept="image/*" id="cameraInput" name="cameraInput" class="cropit-image-input">
 						<div class="btnEstilizado">
-							Escanee
+							<!--Escanee-->
 						</div>
 
 					</div>
 
 			      	<div class="cropit-preview"></div>
 			      	<div class="image-size-label">
-			        	Redimensionar imagen
+			        	Ajustar foto
 			      	</div>
 
 			      	<input type="range" class="cropit-image-zoom-input">
-			      	<button class="export">Validar</button>
+			      	<button class="export">Comparar</button>
 
 			    </div>
 
@@ -166,6 +60,7 @@
 			</div>
 
 			<div class="areaComparar">
+				Guia de Foto
 				<div id="real">
 					<img src="img/overlay.jpg">
 				</div>
@@ -173,16 +68,21 @@
 					<canvas width="320" height="240" style="display:none"></canvas>
 					<img src="" id="imagen_comparacion" class="imagenCroppeada">
 				</div>
+				<div id="actComparar">
+					<a href="#" class="btnAccion" id="guardar">VALIDAR</a>
+				</div>
 				<div id="image-diff" class="small-drop-zone" style="display: inline-block;">
-					Diff will appear here.
+					
 				</div>
 			</div>
 
-			<div id="diff-results" style="display:none;">
+			<div id="diff-results" style="display:none; text-align:center;">
 				<p>
-					<strong>The second image is <span id="mismatch1"></span>% different compared to the first.<br>
-					<strong>The second image is <span id="mismatch2"></span>% different compared to the first.
-					<span id="differentdimensions" style="display:none;">And they have different dimensions.</span></strong>
+					<strong>La foto escaneada es <span id="mismatch1"></span>% diferente del marcador.</strong><br>
+					<strong>La foto escaneada es <span id="mismatch2"></span>% diferente del marcador.</strong>
+					<span id="differentdimensions" style="display:none;">
+						And they have different dimensions.
+					</span>
 				</p>
 			</div>
 			
@@ -190,6 +90,18 @@
 				<strong>These images are the same!</strong>
 			</p>
 
+		</div>
+	</div>
+
+	<div id="ejemploFoto" style="display:none;">
+		<div class="contenidoLayer">
+			<p class="textoRecomendacion">
+				<br>
+				Le recomendamos tomar la foto en su teléfono en posición horizontal.
+				<br><br>
+				<img src="img/phone.png" class="ejemploTelefono">
+				<br><br>
+			</p>
 		</div>
 	</div>
 

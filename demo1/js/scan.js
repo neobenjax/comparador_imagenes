@@ -22,6 +22,16 @@
 
           	$('#comparacion > #imagen_comparacion').attr('src',imageData);
         });
+
+        $.fancybox(
+        	'#ejemploFoto',
+        	{
+        		padding:0,
+				fitToView:false,
+				wrapCSS : 'customCloseLayer',
+				autoCenter: false
+        	}
+        	);
 	});
 
 	/* FIN UPLOAD FOTO */
@@ -113,6 +123,8 @@
 		{
 			videoSource = $('.btnCamera').last().val();
 			start();
+			$('#tomaFoto').show();
+			$('#uploadFoto').hide();
 		}
 		else
 			setTimeout(hilo,20);
@@ -136,8 +148,8 @@
 
 	    $('#comparacion > #imagen_comparacion').attr('src',canvas.toDataURL());
 
-		$('.contCapturar').hide();
-		$('.contCancel').show();
+		$('#capturar').hide();
+		$('#cancelar').show();
 		stop();
 	});
 	
@@ -145,8 +157,8 @@
 		event.preventDefault();
 		
 		start()
-		$('.contCapturar').show();
-		$('.contCancel').hide();
+		$('#capturar').show();
+		$('#cancelar').hide();
 	});
 
 	$(document).on('click','#guardar',function(event){
@@ -168,5 +180,8 @@
 		start();
 		hilo();
 	}
-	else
+	else {
 		alert('No sirves!');
+		$('#tomaFoto').hide();
+		$('#uploadFoto').show();
+	}
