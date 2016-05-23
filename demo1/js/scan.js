@@ -167,8 +167,8 @@
 		var file1 = $('#real').children('img').attr('src');
 		var file2 = $('#comparacion').children('img').attr('src');
 
-		resembleControl1 = resemble(file1).compareTo(file2).onComplete(function(data){onComplete(data,'1')}).ignoreColors();
-		resembleControl2 = resemble(file1).compareTo(file2).onComplete(function(data){onComplete(data,'2')}).ignoreAntialiasing();
+		resembleControl1 = resemble(file1).compareTo(file2).ignoreColors().onComplete(function(data){onComplete(data,'1')});
+		resembleControl2 = resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
 
 	});
 
@@ -181,7 +181,7 @@
 		hilo();
 	}
 	else {
-		alert('No sirves!');
+		//alert('No sirves!');
 		$('#tomaFoto').hide();
 		$('#uploadFoto').show();
 	}
