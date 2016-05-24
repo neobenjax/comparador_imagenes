@@ -150,8 +150,8 @@ input.cropit-image-zoom-input {
 /*INPUT RANGE*/
 input[type=range] {
   -webkit-appearance: none;
-  margin: 18px 0;
-  width: 100%;
+  margin: 18px auto;
+  width: calc(100% - 40px);
 }
 input[type=range]:focus {
   outline: none;
