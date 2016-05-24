@@ -70,7 +70,7 @@
 					$('#differentdimensions').hide();
 				}
 				
-				$('#diff-results').show();
+				//$('#diff-results').show();
 				$('#thesame').hide();
 			}
 

@@ -1,3 +1,6 @@
+body{
+  font-family: 'Roboto', sans-serif;
+}
 div.contenidoCentrado{
 	margin:0 auto;
 	width: 100%;
@@ -136,6 +139,7 @@ button {
 }
 p.textoRecomendacion {
     margin: 0;
+    padding: 10px 20px;
 }
 div#uploadFoto {
     display: none;
@@ -241,4 +245,28 @@ input[type=range]:focus::-ms-fill-upper {
 	#ejemploFoto{
 		max-width: calc(100vw - 60px);
 	}
+}
+
+div#comparacion {
+    display: none;
+}
+
+div#diff-results {
+    display: none;
+}
+
+strong.paso {
+    display: block;
+    padding: 10px 0;
+}
+
+.instrucciones {
+    width: 320px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+span.tituloInstrucciones {
+    font-size: 17px;
+    display: block;
 }
