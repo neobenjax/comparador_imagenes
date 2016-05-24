@@ -6,8 +6,8 @@
 	var videoSource = "";
 	var localStream;
 	var resultadosImg = new Array(2);
-
-	console.log(resultadosImg)
+	var file1, file2;
+	
 
 
 	/* PARA UPLOAD FOTO */
@@ -74,7 +74,9 @@
 				$('#thesame').hide();
 			}
 
-			if(cont == 2)
+			if(cont == 1)
+				resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
+			else if(cont == 2)
 			{
 				if(resultadosImg[0] != undefined && resultadosImg[1] != undefined)
 				{
@@ -165,12 +167,10 @@
 
 	function guardarComparar(){
 		
-		var file1 = $('#real').children('img').attr('src');
-		var file2 = $('#comparacion').children('img').attr('src');
+		file1 = $('#real').children('img').attr('src');
+		file2 = $('#comparacion').children('img').attr('src');
 
 		resemble(file1).compareTo(file2).ignoreColors().onComplete(function(data){onComplete(data,'1')});
-		resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
-
 	}
 
 	$(document).on('click','#capturar',function(event){
