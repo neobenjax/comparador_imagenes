@@ -73,6 +73,17 @@
 				$('#diff-results').show();
 				$('#thesame').hide();
 			}
+
+			if(cont == 2)
+			{
+				if(resultadosImg[0] != undefined && resultadosImg[1] != undefined)
+				{
+					if(resultadosImg[0] < 80 && resultadosImg[1] < 40)
+						alert('Contenidos desbloqueados!')
+					else
+						alert('Vuelve a intentarlo!')
+				}
+			}
 		}
 
 	/* FIN DE COMPARAR IMAGENES */
@@ -160,14 +171,6 @@
 		resemble(file1).compareTo(file2).ignoreColors().onComplete(function(data){onComplete(data,'1')});
 		resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
 
-		if(resultadosImg[0] != undefined && resultadosImg[1] != undefined)
-		{
-			if(resultadosImg[0] < 80 && resultadosImg[1] < 40)
-				alert('Contenidos desbloqueados!')
-			else
-				alert('Vuelve a intentarlo!')
-		}
-		console.log(resultadosImg)
 	}
 
 	$(document).on('click','#capturar',function(event){
