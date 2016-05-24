@@ -4,7 +4,10 @@
 	var button = document.querySelector('button');
 	var selectors = [videoSelect];
 	var videoSource = "";
-	var localStream, resembleControl1,resembleControl2;
+	var localStream;
+	var resultadosImg = new Array(2);
+
+	console.log(resultadosImg)
 
 
 	/* PARA UPLOAD FOTO */
@@ -14,13 +17,16 @@
 		  imageBackground: true,
 		  imageBackgroundBorderWidth: 20
 		});
+
 		$('.export').click(function() {
 			var imageData = $('.image-editor').cropit('export', {
 				type: 'image/jpeg',
-				quality: .6
+				quality: .9
 			});
 
           	$('#comparacion > #imagen_comparacion').attr('src',imageData);
+
+          	guardarComparar();
         });
 
         $.fancybox(
@@ -41,23 +47,29 @@
 
 		function onComplete(data,cont){
 
-			//var time = Date.now();
-
 			var diffImage = new Image();
 			diffImage.src = data.getImageDataUrl();
 
 			$('#image-diff').html(diffImage);
 
+			resultadosImg[cont-1] = parseFloat(data.misMatchPercentage);
+
 			if(data.misMatchPercentage == 0){
+				
+
 				$('#thesame').show();
 				$('#diff-results').hide();
+
 			} else {
+
 				$('#mismatch'+cont).text(data.misMatchPercentage);
+				
 				if(!data.isSameDimensions){
 					$('#differentdimensions').show();
 				} else {
 					$('#differentdimensions').hide();
 				}
+				
 				$('#diff-results').show();
 				$('#thesame').hide();
 			}
@@ -140,6 +152,24 @@
 	  }
 	}
 
+	function guardarComparar(){
+		
+		var file1 = $('#real').children('img').attr('src');
+		var file2 = $('#comparacion').children('img').attr('src');
+
+		resemble(file1).compareTo(file2).ignoreColors().onComplete(function(data){onComplete(data,'1')});
+		resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
+
+		if(resultadosImg[0] != undefined && resultadosImg[1] != undefined)
+		{
+			if(resultadosImg[0] < 80 && resultadosImg[1] < 40)
+				alert('Contenidos desbloqueados!')
+			else
+				alert('Vuelve a intentarlo!')
+		}
+		console.log(resultadosImg)
+	}
+
 	$(document).on('click','#capturar',function(event){
 		event.preventDefault();
 
@@ -147,6 +177,8 @@
 	    drawImage(video, 0, 0, canvas.width, canvas.height);
 
 	    $('#comparacion > #imagen_comparacion').attr('src',canvas.toDataURL());
+
+	    guardarComparar();
 
 		$('#capturar').hide();
 		$('#cancelar').show();
@@ -161,7 +193,7 @@
 		$('#cancelar').hide();
 	});
 
-	$(document).on('click','#guardar',function(event){
+/*	$(document).on('click','#guardar',function(event){
 		event.preventDefault();
 		
 		var file1 = $('#real').children('img').attr('src');
@@ -170,7 +202,7 @@
 		resembleControl1 = resemble(file1).compareTo(file2).ignoreColors().onComplete(function(data){onComplete(data,'1')});
 		resembleControl2 = resemble(file1).compareTo(file2).ignoreAntialiasing().onComplete(function(data){onComplete(data,'2')});
 
-	});
+	});*/
 
 
 	hasCamera = (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) ? 
